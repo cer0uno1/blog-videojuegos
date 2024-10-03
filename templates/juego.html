@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ videojuego.nombre }}</title>
+</head>
+<body>
+    <h1>{{ videojuego.nombre }}</h1>
+    <p>{{ videojuego.descripcion }}</p>
+    <p>Año de lanzamiento: {{ videojuego.añolanzamiento }}</p>
+    <p>Plataformas: {{ videojuego.dispositivoslanzamiento }}</p>
+    <p>Géneros: {{ videojuego.genero }}</p>
+
+    <h2>Reseñas:</h2>
+    <ul>
+        {% for reseña in reseñas %}
+        <li><strong>{{ reseña.creador }}</strong>: <br>{{ reseña.contenido }}<br>
+        <small>Publicado el: {{ reseña.fechacreado }}</small></li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Dejar una reseña:</h3>
+    <form method="POST">
+        <input type="text" name="creador" placeholder="Tu Nombre" required>
+        <br>
+        <textarea name="contenido" placeholder="Tu Reseña"></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+
+    <a href="/">Volver al inicio</a>
+</body>
+</html>
