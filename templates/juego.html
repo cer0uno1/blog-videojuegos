@@ -4,30 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ videojuego.nombre }}</title>
-</head>
+    <link rel="stylesheet" href="../static/styles.css">
 <body>
-    <h1>{{ videojuego.nombre }}</h1>
-    <p>{{ videojuego.descripcion }}</p>
-    <p>Año de lanzamiento: {{ videojuego.añolanzamiento }}</p>
-    <p>Plataformas: {{ videojuego.dispositivoslanzamiento }}</p>
-    <p>Géneros: {{ videojuego.genero }}</p>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/videojuegos">Todos los juegos</a> |
+        <a href="/acercade">Sobre mí</a>
+    </nav>
 
-    <h2>Reseñas:</h2>
+    <div class="game-details">
+        <img src="{{ videojuego.caratulalink }}" alt="Carátula de {{ videojuego.nombre }}" class="caratula">
+        <div class="info">
+            <h1>{{ videojuego.nombre }}</h1>
+            <p>{{ videojuego.descripcion }}</p>
+            <p>Año de lanzamiento: {{ videojuego.añolanzamiento }}</p>
+        </div>
+    </div>
+
+    <div class="screenshot-container">
+        <h2>Screenshot:</h2>
+        <img src="{{ videojuego.screenshotlink }}" alt="Captura de pantalla de {{ videojuego.nombre }}" class="screenshot">
+    </div>
+
+    <h2>Comentarios:</h2>
     <ul>
-        {% for reseña in reseñas %}
-        <li><strong>{{ reseña.creador }}</strong>: <br>{{ reseña.contenido }}<br>
-        <small>Publicado el: {{ reseña.fechacreado }}</small></li>
-        {% endfor %}
+        {% if reseñas %}
+            {% for reseña in reseñas %}
+                <li>
+                    <strong>{{ reseña.creador }}</strong>: <br>{{ reseña.contenido }}<br>
+                    <small>Publicado el: {{ reseña.fechacreado.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>No hay reseñas disponibles.</li>
+        {% endif %}
     </ul>
-    
-    <h3>Dejar una reseña:</h3>
+
+    <h3>Dejar un comentario:</h3>
     <form method="POST">
         <input type="text" name="creador" placeholder="Tu Nombre" required>
         <br>
-        <textarea name="contenido" placeholder="Tu Reseña"></textarea>
+        <textarea name="contenido" placeholder="Tu Comentario" required></textarea>
         <button type="submit">Enviar</button>
     </form>
 
     <a href="/">Volver al inicio</a>
 </body>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024</footer>
 </html>

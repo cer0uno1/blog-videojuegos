@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Videojuego</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+        <nav>
+        <a href="/">Inicio</a> |
+        <a href="/videojuegos">Todos los juegos</a> |
+        <a href="/acercade">Sobre mí</a>
+    </nav>
+
+    <h1>Agregar un Nuevo Videojuego</h1>
+
+    <form action="{{ url_for('agregarVideojuego') }}" method="POST">
+
+        <label for="caratulalink">Ingrese el link de la imagen de caratula:</label>
+        <input type="url" id="caratulalink" name="caratulalink" required>
+
+        <label for="nombre">Nombre del Videojuego:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="año_lanzamiento">Año de Lanzamiento:</label>
+        <input type="number" id="añolanzamiento" name="añolanzamiento" required><br><br>
+
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
+
+        <label for="screenshotlink">Ingrese el link de una captura de pantalla del juego:</label>
+        <input type="url" id="screenshotlink" name="screenshotlink" required>
+
+        <button type="submit">Agregar Videojuego</button>
+    </form>
+
+        <a href="/">Volver al inicio</a>
+</body>
+
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024</footer>
+</html>

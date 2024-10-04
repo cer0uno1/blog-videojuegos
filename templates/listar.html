@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Videojuegos</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/videojuegos">Todos los juegos</a> |
+        <a href="/acercade">Sobre mí</a>
+    </nav>
+    <h1>Lista de Videojuegos</h1>
+    <ul class="game-grid">
+        {% for videojuego in videojuegos %}
+            <li class="game-item">
+                <a href="{{ url_for('detallesJuego', idvideojuego=videojuego.idvideojuegos) }}">
+                    <img src="{{ videojuego.caratulalink }}" alt="{{ videojuego.nombre }}" class="game-cover">
+                    <p class="game-title">{{ videojuego.nombre }}</p>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024</footer>
+</html>

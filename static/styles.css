@@ -1,0 +1,247 @@
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+a{
+    color: #ffffff;
+}
+
+a:visited {
+    color: #ffffff;
+}
+
+nav {
+    background-color: #1a1a1a;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: #00ff99 !important;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ff007f !important;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    color: #00ff99; /* Verde brillante */
+    text-shadow: 0 0 10px rgba(0, 255, 153, 0.7);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="number"],
+textarea {
+    width: 80%;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    box-shadow: 0 0 5px rgba(0, 255, 153, 0.7);
+    transition: box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    box-shadow: 0 0 10px rgba(0, 255, 153, 1);
+}
+
+button {
+    background-color: #00ff99;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #ff007f; /* Rosa en hover */
+    transform: scale(1.05); /* Efecto de aumento */
+}
+
+.game-details {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 20px;
+}
+
+.game-details img {
+    border: 2px solid #00ff99; /* Borde brillante para la carátula */
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+footer {
+    text-align: center;
+    background-color: #1a1a1a; /* Fondo del footer */
+    padding: 10px;
+    color: #00ff99; /* Texto del footer */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+ul {
+    list-style-type: none; /* Sin viñetas */
+    padding: 0;
+    margin: 20px;
+}
+
+li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #2a2a2a; /* Fondo de los elementos de lista */
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 255, 153, 0.5); /* Sombra suave */
+    transition: transform 0.3s;
+}
+
+li:hover {
+    transform: scale(1.02); /* Efecto de aumento en hover */
+}
+.game-details {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 20px;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas más pequeñas */
+}
+
+.game-details img.caratula {
+    border: 2px solid #00ff99; /* Borde brillante para la carátula */
+    border-radius: 10px;
+    margin-right: 20px;
+    width: 200px; /* Ajusta el ancho de la carátula */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+.info {
+    max-width: 800px; /* Establece un ancho máximo para la información del juego */
+}
+
+.info p {
+    margin: 10px 0; /* Espacio entre los párrafos */
+}
+
+.screenshot-container {
+    text-align: center; /* Centra el texto dentro del contenedor */
+    margin: 20px 0; /* Espacio vertical alrededor del contenedor */
+}
+
+.screenshot-container h2 {
+    color: #00ff99; /* Color del título */
+    text-shadow: 0 0 10px rgba(0, 255, 153, 0.7); /* Efecto de brillo */
+}
+
+.screenshot {
+    border: 2px solid #00ff99; /* Borde brillante para el screenshot */
+    border-radius: 10px;
+    width: 100%; /* Ancho completo del contenedor */
+    max-width: 800px; /* Ancho máximo del screenshot aumentado */
+    height: auto; /* Mantiene la proporción de la imagen */
+    margin-top: 10px; /* Espacio superior para el screenshot */
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Cambia el tamaño mínimo a 150px */
+    gap: 15px; /* Espacio entre las celdas */
+    padding: 20px;
+}
+
+.game-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.game-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
+
+.game-cover:hover {
+    transform: scale(1.05);
+}
+
+.game-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    text-align: center;
+    padding: 5px;
+    margin: 0;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.game-title:hover {
+    background-color: rgba(255, 0, 127, 0.8);
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.profile-image {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+}
+
+.contact-info {
+    text-align: center;
+}
+
+.social-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.present {
+    animation: aparecer 5s ease 0s 1 normal forwards;
+}
+
+@keyframes aparecer {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
