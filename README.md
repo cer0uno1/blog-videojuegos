@@ -1,6 +1,6 @@
-# Reseñador de videojuegos
+# Blog de videojuegos
 
-Web app con Flask de backend que permitirá dejar reseñas de videojuegos cargados en una base de datos.
+Web app con Flask de backend que permitirá dejar comentarios de videojuegos cargados en una base de datos.
 
 Aplicación desplegada con PythonAnywhere.
 
