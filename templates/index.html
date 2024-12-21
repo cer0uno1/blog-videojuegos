@@ -7,18 +7,45 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-        <nav>
+    <nav>
         <a href="/">Inicio</a> |
         <a href="/videojuegos">Todos los juegos</a> |
+        {% if 'user_id' in session %}
+            <a href="/perfil">Mi Perfil ({{ session['username'] }})</a> |
+            {% if session['esAdmin'] %}
+                <a href="/admin_dashboard">Panel de Admin</a> |
+            {% endif %}
+            <a href="/logout">Salir</a> |
+        {% else %}
+            <a href="/login">Ingreso</a> |
+        {% endif %}
         <a href="/acercade">Sobre mí</a>
-    </nav>
+    </nav>  
+    <main>
+        <!--Si hay mensajes flash, los muestra-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+    
     <h1>Buscar un juego:</h1>
+    <!-- Barra de búsqueda de videojuegos-->
     <form method="POST">
-        <input type="text" name="search" placeholder="Ingresar título del juego..." required>
+        <input type="text" name="search" placeholder="Ingresar título del juego..." autocomplete="off">
         <button type="submit">Buscar</button>
     </form>
+
+    <!-- Lista que muestra los resultados obtenidos de la búsqueda-->
     {% if juegos %}
-    <ul>
+    <ul id="resultados">
         {% for game in juegos %}
         <li><a href="{{ url_for('detallesJuego', idvideojuego=game.idvideojuegos) }}">{{ game.nombre }}</a></li>
         {% endfor %}
@@ -26,6 +53,9 @@
     {% endif %}
 
     <p>¿No encuentras el juego que estás buscando? <a href="/agregar">Añadelo aquí</a></p>
+</main>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024
+<small class="cromatico">Versión 4.0</small>
+</footer>
 </body>
-<footer>Creado por Sebastián M Errecalde, Septiembre 2024</footer>
 </html>
