@@ -7,36 +7,83 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-        <nav>
+    <nav>
         <a href="/">Inicio</a> |
         <a href="/videojuegos">Todos los juegos</a> |
+        {% if 'user_id' in session %}
+            <a href="/perfil">Mi Perfil ({{ session['username'] }})</a> |
+            {% if session['esAdmin'] %}
+                <a href="/admin_dashboard">Panel de Admin</a> |
+            {% endif %}
+            <a href="/logout">Salir</a> |
+        {% else %}
+            <a href="/login">Ingreso</a> |
+        {% endif %}
         <a href="/acercade">Sobre mí</a>
-    </nav>
+    </nav> 
+<main>
+    <!--Si hay mensajes flash, los muestra -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+                <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
 
     <h1>Agregar un Nuevo Videojuego</h1>
+<!-- Formulario para cargar los datos del nuevo videojuego-->
+    <form action="{{ url_for('agregarVideojuego') }}" method="POST" enctype="multipart/form-data">
 
-    <form action="{{ url_for('agregarVideojuego') }}" method="POST">
-
-        <label for="caratulalink">Ingrese el link de la imagen de caratula:</label>
-        <input type="url" id="caratulalink" name="caratulalink" required>
+        <div class="custom-file-container">
+            <input type="file" id="caratula" class="custom-file-input" name="caratula" accept="image/*"/>
+            <label for="caratula" class="custom-file-label">Subir carátula del juego: </label>
+        </div>
 
         <label for="nombre">Nombre del Videojuego:</label>
-        <input type="text" id="nombre" name="nombre" required><br><br>
+        <input type="text" id="nombre" name="nombre" autocomplete="off" required><br><br>
 
         <label for="año_lanzamiento">Año de Lanzamiento:</label>
-        <input type="number" id="añolanzamiento" name="añolanzamiento" required><br><br>
+        <input type="number" id="añolanzamiento" name="añolanzamiento" min="1952" max="2038" step="1" required><br><br>
+
+<!-- Muestra todos los géneros almacenados en la base de datos -->
+<label for="generos">Selecciona los géneros:</label><br><br>
+<div id="generos" name="generos" class="checkbox-group" required>
+    {% for genero in generos %}
+        <input type="checkbox" id="genero_{{ genero.idgeneros }}" name="generos[]" value="{{ genero.idgeneros }}">
+        <label for="genero_{{ genero.idgeneros }}">{{ genero.nombre }}</label><br>
+    {% endfor %}
+</div><br><br>
+
+<!-- Muestra todos los dispositivos almacenados en la base de datos -->
+<label for="dispositivos">Selecciona los dispositivos donde está disponible:</label><br><br>
+<div id="dispositivos" name="dispositivos" class="checkbox-group" required>
+    {% for dispositivo in dispositivos %}
+        <input type="checkbox" id="dispositivo_{{ dispositivo.iddispositivos }}" name="dispositivos[]" value="{{ dispositivo.iddispositivos }}">
+        <label for="dispositivo_{{ dispositivo.iddispositivos }}">{{ dispositivo.nombre }}</label><br>
+    {% endfor %}
+</div><br><br>
 
         <label for="descripcion">Descripción:</label><br>
-        <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
+        <textarea id="descripcion" name="descripcion" rows="4" cols="50" autocomplete="off" required></textarea><br><br>
 
-        <label for="screenshotlink">Ingrese el link de una captura de pantalla del juego:</label>
-        <input type="url" id="screenshotlink" name="screenshotlink" required>
+        <div class="custom-file-container">
+            <input type="file" id="screenshot" class="custom-file-input" name="screenshot" accept="image/*"/>
+            <label for="screenshot" class="custom-file-label">Subir captura de pantalla del juego: </label>
+        </div>
 
         <button type="submit">Agregar Videojuego</button>
     </form>
-
-        <a href="/">Volver al inicio</a>
+    <a href="/" class="back-link">Volver al inicio</a>
+</main>
+        
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024
+<small class="cromatico">Versión 4.0</small>
+</footer>
 </body>
-
-<footer>Creado por Sebastián M Errecalde, Septiembre 2024</footer>
 </html>
