@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body> 
+<nav>
+    <a href="/">Inicio</a> |
+    <a href="/videojuegos">Todos los juegos</a> |
+    {% if 'user_id' in session %}
+        <a href="/perfil">Mi Perfil ({{ session['username'] }})</a> |
+        {% if session['esAdmin'] %}
+            <a href="/admin_dashboard">Panel de Admin</a> |
+        {% endif %}
+        <a href="/logout">Salir</a> |
+    {% else %}
+        <a href="/login">Ingreso</a> |
+    {% endif %}
+    <a href="/acercade">Sobre mí</a>
+</nav>    
+<main>
+<div class="container">
+    <!--Si hay mensajes flash, los muestra-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+                <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <h2>Mi Perfil</h2>
+
+        <!-- Información del usuario -->
+    <div class="profile-info">
+    <div class="profile-photo">
+        {% if user.fotoperfil %}
+        <!-- Muestra la foto de perfil del usuario-->
+        <img src="{{ user.fotoperfil if user.fotoperfil else 'static/uploads/sinimagen.png' }}" alt="Foto de perfil de {{ user.username }}" class="img-thumbnail">
+        {% else %}
+        <img src="static/uploads/sinimagen.png" alt="Foto de perfil de {{ user.username }}" class="img-thumbnail">
+        {% endif %}
+    </div>
+        <h1>¡Hola, {{ session['username'] }}!</h1> <!-- Muestra el nombre del usuario-->
+        <h2 for="bio">Biografía:</h2>
+        <p>{{ user. bio }}</p> <!-- Muestra la descripción del usuario-->
+    </div>
+
+    <!-- Formulario para actualizar la foto de perfil -->
+    <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+        <label for="foto" class="custom-file-label">Actualizar foto de perfil:</label>
+        <input type="file" name="foto" id="foto" class="custom-file-input">
+        <button type="submit">Guardar Foto</button>
+    </form>
+
+<!-- Formulario para actualizar la descripción del usuario -->
+<form method="POST" action="{{ url_for('update_profile') }}">
+        <h3>Actualizar biografia: </h3>
+        <textarea id="descripcion" name="bio" rows="10" cols="100">{{ user.bio }}</textarea>
+        <button type="submit">Actualizar perfil</button>
+    </div>
+</form>
+
+<!-- Juegos favoritos -->
+<div class="favorite-games">
+    <h3>Mis juegos favoritos: </h3>
+{% if juegos_favoritos %}
+    <ul>
+        {% for juego in juegos_favoritos %}
+            <li>{{ juego.nombre }}</li> <!-- Muestra los videojuegos favoritos del usuario -->
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No tienes juegos favoritos aún.</p>
+{% endif %}
+
+<h3>Cambiar juegos favoritos: </h3>
+<!-- Formulario para cambiar los videojuegos favoritos del usuario -->
+<form method="POST" action="{{ url_for('update_favorites') }}">
+    <div class="games-list">
+        {% for game in all_games %}
+            <label>
+                <input type="checkbox" name="favorite_games" value="{{ game.idvideojuegos }}"
+                {% if game in juegos_favoritos %} checked {% endif %}> {{ game.nombre }}
+            </label><br>
+        {% endfor %}
+    </div>
+    <button type="submit">Guardar favoritos</button>
+</form>
+
+
+    <!-- Botón para cerrar sesión -->
+    <div class="logout">
+        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    </div>
+</div>
+</main>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024
+<small class="cromatico">Versión 4.0</small>
+</footer>
+</body>
+</html>

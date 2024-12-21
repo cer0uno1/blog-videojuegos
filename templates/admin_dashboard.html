@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a>|
+        <a href="/admin_dashboard">Panel de control</a>|
+        <a href="/admin/users">Gestión de usuarios</a>|
+        <a href="/logout">Salir</a>
+    </nav>
+    <main>
+    <!--Si hay mensajes flash, los muestra -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+    <h1>Panel de Administración</h1>
+    <!-- Sección de Videojuegos -->
+     <a href="#seccion2" class="back-link">Ir a discusiones</a>
+     <a href="#seccion3" class="back-link">Ir a respuestas</a>
+    <section id="seccion1">
+        <h2><u>Videojuegos</u></h2>
+        {% if juegos %}
+            <ul>
+                {% for juego in juegos %}
+                    <li>
+                        <strong><u>{{ juego.nombre }}</u></strong> ({{ juego.añolanzamiento }})<br><br>
+                        ID: {{ juego.idvideojuegos }}<br><br>
+                        {{ juego.descripcion }}<br><br>
+                        
+                        <a href="{{ url_for('editar_videojuego', idvideojuego=juego.idvideojuegos) }}">
+                            <button type="button" class="modificar">Modificar</button>
+                        </a><br><br>
+    
+                        {% if juego.aprobado == 0 %}
+                            <form action="{{ url_for('cambiar_estado', tipo='videojuego', id=juego.idvideojuegos, estado=1) }}" method="POST">
+                                <button type="submit" class="aprobar">Aprobar</button>
+                            </form>
+                        {% else %}
+                            <form action="{{ url_for('cambiar_estado', tipo='videojuego', id=juego.idvideojuegos, estado=0) }}" method="POST">
+                                <button type="submit" class="rechazar">Rechazar</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay videojuegos disponibles.</p>
+        {% endif %}
+    </section>
+    
+
+    <!-- Sección de Discusiones -->
+    <section id="seccion2">
+        <h2><u>Discusiones</u></h2>
+        {% if discusiones %}
+            <ul>
+                {% for discusion in discusiones %}
+                    <li>
+                        <strong>Juego: {{ discusion.videojuego.nombre }}</strong> (ID: {{ discusion.videojuegodiscutido }})<br><br>
+                        <strong>ID de discusión: </strong> {{ discusion.iddiscusiones }}<br><br>
+                        Creador: {{ discusion.creador }}<br><br>
+                        Contenido: {{ discusion.contenido }}<br><br>
+                        {% if discusion.aprobado == 0 %}
+                            <form action="{{ url_for('cambiar_estado', tipo='discusion', id=discusion.iddiscusiones, estado=1) }}" method="POST">
+                                <button type="submit" class="aprobar">Aprobar</button>
+                            </form>
+                        {% else %}
+                            <form action="{{ url_for('cambiar_estado', tipo='discusion', id=discusion.iddiscusiones, estado=0) }}" method="POST">
+                                <button type="submit" class="rechazar">Rechazar</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay discusiones disponibles.</p>
+        {% endif %}
+    </section>
+    <a href="#seccion1"> Volver arriba</a>
+
+    <!-- Sección de Respuestas -->
+    <section id="seccion3">
+        <h2><u>Respuestas</u></h2>
+        {% if respuestas %}
+            <ul>
+                {% for respuesta in respuestas %}
+                    <li>
+                        <strong>ID de discusión: {{ respuesta.discusionid }}</strong><br><br>
+                        <strong>ID de respuesta: {{ respuesta.idrespuestas}}</strong><br><br>
+                        Creador: {{ respuesta.creador }}<br><br>
+                        Contenido: {{ respuesta.contenido }}<br><br>
+                        {% if respuesta.aprobado == 0 %}
+                            <form action="{{ url_for('cambiar_estado', tipo='respuesta', id=respuesta.idrespuestas, estado=1) }}" method="POST">
+                                <button type="submit" class="aprobar">Aprobar</button>
+                            </form>
+                        {% else %}
+                            <form action="{{ url_for('cambiar_estado', tipo='respuesta', id=respuesta.idrespuestas, estado=0) }}" method="POST">
+                                <button type="submit" class="rechazar">Rechazar</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay respuestas disponibles.</p>
+        {% endif %}
+    </section>
+    <a href="#seccion1" class="back-link"> Volver arriba</a>
+</main>
+<!-- Al apretar el botón de aprobar / rechazar, cambia el estado de aprobación de cada contenido-->
+
+<a href="/admin/users" class="back-link">Gestión de usuarios</a>
+
+    <!-- Botón de Cerrar Sesión -->
+<footer>
+    <form action="/logout" method="get">
+        <button type="submit">Cerrar Sesión</button>
+    </form>
+    <br>
+    <p>Creado por Sebastián M Errecalde, Septiembre 2024</p>
+    <small class="cromatico">Versión 4.0</small>
+</footer>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a>|
+        <a href="/admin_dashboard">Panel de control</a>|
+        <a href="/admin/users">Gestión de usuarios</a>|
+        <a href="/logout">Salir</a>
+    </nav>
+    <main>
+        <!--Si hay mensajes flash, los muestra -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+    <h1>Gestión de Usuarios</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Administrador</th>
+                <th>Baneado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.idusuario }}</td>
+                <td><a href="{{ url_for('perfilusuario', username=usuario.username) }}">{{ usuario.username }} </td>
+                <td>{{ 'Sí' if usuario.esAdmin else 'No' }}</td>
+                <td>{{ 'Sí' if usuario.baneado else 'No' }}</td>
+                <td>
+                    <form method="POST" style="display: inline;">
+                        <input type="hidden" name="user_id" value="{{ usuario.idusuario }}">
+                        <input type="hidden" name="action" value="ban">
+                        <button type="submit">
+                            {{ 'Desbanear' if usuario.baneado else 'Banear' }}
+                        </button>
+                    </form>
+                    {% if not usuario.esAdmin %}
+                    <form method="POST" style="display: inline;">
+                        <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                        <input type="hidden" name="action" value="make_admin">
+                        <button type="submit">Hacer Administrador</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+<a href="/admin_dashboard" class="back-link">Volver al panel de control</a>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024
+    <small class="cromatico">Versión 4.0</small>
+    </footer>
+</body>
+</html>

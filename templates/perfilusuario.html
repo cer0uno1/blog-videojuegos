@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de {{ user.username }}</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/videojuegos">Todos los juegos</a> |
+        {% if 'user_id' in session %}
+            <a href="/perfil">Mi Perfil ({{ session['username'] }})</a> |
+            {% if session['esAdmin'] %}
+                <a href="/admin_dashboard">Panel de Admin</a> |
+            {% endif %}
+            <a href="/logout">Salir</a> |
+        {% else %}
+            <a href="/login">Ingreso</a> |
+        {% endif %}
+        <a href="/acercade">Sobre mí</a>
+    </nav>    
+    <main id="profile-main">
+        <div class="user-profile profile-info">
+            <!-- Foto de perfil -->
+            <div class="profile-photo">
+                <img src="/{{ user.fotoperfil if user.fotoperfil else 'static/uploads/sinimagen.png' }}" 
+                     alt="Foto de perfil de {{ user.username }}" 
+                     class="img-thumbnail">
+            </div>
+            <!-- Nombre de usuario -->
+            <h1>{{ user.username }}</h1>
+
+            <div class="user-role">
+                {% if user.esAdmin %}
+                    <p class="admin-role"> &#9733; Administrador</p>
+                {% else %}
+                    <p class="user-role">Usuario</p>
+                {% endif %}
+            </div>
+
+            {% if user.baneado %}
+            <p class="baneado">&#128711; Usuario baneado</p>
+            {% else %}
+            {% endif %}
+        
+
+            <!-- Biografía -->
+            <h2>Biografía:</h2>
+            <p>{{ user.bio }}</p>
+        
+            <!-- Videouegos favoritos -->
+            <section class="favorite-games">
+                <h3>Juegos favoritos:</h3>
+                <ul>
+                    {% for juego in user.favoritos %}
+                        <li><a href="{{ url_for('detallesJuego', idvideojuego=juego.idvideojuegos) }}">{{ juego.nombre }}</a></li>
+                    {% else %}
+                        <li>No hay juegos favoritos aún.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+            
+        </div>
+    </main>
+ <footer>Creado por Sebastián M Errecalde, Septiembre 2024
+<small class="cromatico">Versión 4.0</small>
+</footer>
+</body>
+</html>

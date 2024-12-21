@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso / Registro</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script>
+        // Función que se ejecuta al cargar la página
+        document.addEventListener("DOMContentLoaded", function() {
+            var loginForm = document.getElementById('login-form');
+            var registerForm = document.getElementById('register-form');
+            var activeForm = localStorage.getItem('activeForm') || 'login'; // Por defecto, 'login'
+    
+            if (activeForm === 'login') {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+            }
+        });
+
+        // Función para alternar entre los formularios
+        function toggleForms(target) {
+            var loginForm = document.getElementById('login-form');
+            var registerForm = document.getElementById('register-form');
+            
+            if (target === 'register') {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+                localStorage.setItem('activeForm', 'register');
+            } else {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+                localStorage.setItem('activeForm', 'login');
+            }
+        }
+    </script>    
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/videojuegos">Todos los juegos</a> |
+        {% if 'user_id' in session %}
+            <a href="/perfil">Mi Perfil ({{ session['username'] }})</a> |
+            {% if session['esAdmin'] %}
+                <a href="/admin_dashboard">Panel de Admin</a> |
+            {% endif %}
+            <a href="/logout">Salir</a> |
+        {% else %}
+            <a href="/login">Ingreso</a> |
+        {% endif %}
+        <a href="/acercade">Sobre mí</a>
+    </nav>    
+    <main>
+        <div class="container-login">
+
+        
+        <!--Si hay mensajes flash, los muestra-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                 <div id="flash-messages">
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
+                        </div>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% endwith %}
+
+            <h2>Bienvenido</h2>
+            
+            <!-- Botones para cambiar entre login y register -->
+            <div>
+                <button onclick="toggleForms('register')">¿No tienes cuenta? Regístrate</button>
+                <button onclick="toggleForms('login')">¿Ya tienes cuenta? Inicia sesión</button>
+            </div>
+            
+            <!-- Formulario de Login -->
+            <div id="login-form" style="display: block;">
+                <h3>Iniciar sesión</h3>
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div>
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div>
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit">Iniciar sesión</button>
+                </form>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <div id="register-form" style="display: none;">
+                <h3>Registro</h3>
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div>
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div>
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit">Registrarse</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer>Creado por Sebastián M Errecalde, Septiembre 2024
+        <small class="cromatico">Versión 4.0</small>
+    </footer>
+</body>
+</html>

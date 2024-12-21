@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Videojuego</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<main>
+    <h1>Editar Videojuego</h1>
+    <!-- Formulario para editar los datos del videojuego -->
+    <form action="{{ url_for('editar_videojuego', idvideojuego=videojuego.idvideojuegos) }}" method="POST" enctype="multipart/form-data">
+
+        <div class="custom-file-container">
+            <input type="file" id="caratula" class="custom-file-input" name="caratula" accept="image/*"/>
+            <label for="caratula" class="custom-file-label">Subir carátula del juego: </label>
+        </div>
+    
+        <label for="nombre">Nombre del Videojuego:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ videojuego.nombre }}" required><br><br>
+    
+        <label for="año_lanzamiento">Año de Lanzamiento:</label>
+        <input type="number" id="añolanzamiento" name="añolanzamiento" value="{{ videojuego.añolanzamiento }}" min="1952" max="2038" step="1" required><br><br>
+    
+        <!-- Muestra todos los géneros almacenados en la base de datos. Resalta los elegidos previamente -->
+        <label for="generos">Selecciona los géneros:</label><br><br>
+        <div id="generos" name="generos" class="checkbox-group">
+            {% for genero in generos %}
+                <input type="checkbox" id="genero_{{ genero.idgeneros }}" name="generos" value="{{ genero.idgeneros }}" 
+                {% if genero in videojuego.generos %}checked{% endif %}>
+                <label for="genero_{{ genero.idgeneros }}">{{ genero.nombre }}</label><br>
+            {% endfor %}
+        </div><br><br>
+
+        <!-- Muestra todos los dispositivos almacenados en la base de datos. Resalta los elegidos previamente -->
+        <label for="dispositivos">Selecciona los dispositivos donde está disponible:</label><br><br>
+        <div id="dispositivos" name="dispositivos" class="checkbox-group">
+            {% for dispositivo in dispositivos %}
+                <input type="checkbox" id="dispositivo_{{ dispositivo.iddispositivos }}" name="dispositivos" value="{{ dispositivo.iddispositivos }}"
+                {% if dispositivo in videojuego.dispositivos %}checked{% endif %}>
+                <label for="dispositivo_{{ dispositivo.iddispositivos }}">{{ dispositivo.nombre }}</label><br>
+            {% endfor %}
+        </div><br><br>
+        
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion" rows="4" cols="50" required>{{ videojuego.descripcion }}</textarea><br><br>
+    
+        <div class="custom-file-container">
+            <input type="file" id="screenshot" class="custom-file-input" name="screenshot" accept="image/*"/>
+            <label for="screenshot" class="custom-file-label">Subir captura de pantalla del juego:</label>
+        </div>
+    
+        <button type="submit">Guardar Cambios</button>
+    </form>    
+    <b><u><a href="/admin_dashboard" class="back-link">Volver al panel de administración</a></u></b>
+</main>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024
+<small class="cromatico">Versión 4.0</small>
+</footer>
+</body>
+</html>
