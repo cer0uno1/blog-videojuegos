@@ -5,50 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ videojuego.nombre }}</title>
     <link rel="stylesheet" href="../static/styles.css">
+</head>
 <body>
     <nav>
         <a href="/">Inicio</a> |
         <a href="/videojuegos">Todos los juegos</a> |
+        {% if 'user_id' in session %}
+            <a href="/perfil">Mi Perfil ({{ session['username'] }})</a> |
+            {% if session['esAdmin'] %}
+                <a href="/admin_dashboard">Panel de Admin</a> |
+            {% endif %}
+            <a href="/logout">Salir</a> |
+        {% else %}
+            <a href="/login">Ingreso</a> |
+        {% endif %}
         <a href="/acercade">Sobre mí</a>
-    </nav>
-
+    </nav>  
+    <main>
+        <!--Si hay mensajes flash, los muestra-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-messages">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                    <button type="button" class="close" onclick="this.parentElement.style.display='none';">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+    
     <div class="game-details">
-        <img src="{{ videojuego.caratulalink }}" alt="Carátula de {{ videojuego.nombre }}" class="caratula">
+        <!-- Muestra la cáratula del videojuego-->
+        <img src="/{{ videojuego.caratulalink if videojuego.caratulalink else 'static/uploads/sinimagen.png'}}" alt="Carátula de {{ videojuego.nombre }}" class="caratula">
         <div class="info">
-            <h1>{{ videojuego.nombre }}</h1>
-            <p>{{ videojuego.descripcion }}</p>
-            <p>Año de lanzamiento: {{ videojuego.añolanzamiento }}</p>
+            <h1>{{ videojuego.nombre }}</h1> <!-- Muestra el nombre del videjuego-->
+            <p>{{ videojuego.descripcion }}</p> <!-- Muestra la descripción del videojuego-->
+            <h4>Año de lanzamiento: {{ videojuego.añolanzamiento }}</h4> <!-- Muestra la descripción del videojuego-->
+            
+            <!-- Muestra todos los géneros asociados al videojuego-->
+            <h3>Géneros:</h3>
+            <p>
+                {% for genero in generos %}
+                    {{ genero.nombre }}{% if not loop.last %}, {% endif %} <!-- Si el elemento no es el último de la lista, se agrega una coma y un espacio al lado de este.-->
+                {% endfor %}
+            </p>
+            
+            <!-- Muestra todos los dispositivos asociados al videojuego-->
+            <h3>Dispositivos:</h3>
+            <p>
+                {% for dispositivo in dispositivos %}
+                    {{ dispositivo.nombre }}{% if not loop.last %}, {% endif %} <!-- Si el elemento no es el último de la lista, se agrega una coma y un espacio al lado de este.-->
+                {% endfor %}
+            </p>
         </div>
     </div>
 
     <div class="screenshot-container">
         <h2>Screenshot:</h2>
-        <img src="{{ videojuego.screenshotlink }}" alt="Captura de pantalla de {{ videojuego.nombre }}" class="screenshot">
+        <!-- Muestra la captura de pantalla del videojuego-->
+        <img src="/{{ videojuego.screenshotlink if videojuego.screenshotlink else 'static/uploads/sinimagen.png'}}" alt="Captura de pantalla de {{ videojuego.nombre }}" class="screenshot">
     </div>
-
-    <h2>Comentarios:</h2>
+<div class="discusiones-container">
+    <h2>Discusiones:</h2>
     <ul>
-        {% if reseñas %}
-            {% for reseña in reseñas %}
+        {% if discusiones %}
+            {% for discusion in discusiones %}
+            <!-- Si hay discusiones, para cada discusión cargará: -->
                 <li>
-                    <strong>{{ reseña.creador }}</strong>: <br>{{ reseña.contenido }}<br>
-                    <small>Publicado el: {{ reseña.fechacreado.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    <div class="discussion">
+                        <p><strong><a href="{{ url_for('perfilusuario', username=discusion.creador) }}">{{ discusion.creador}}</a></strong> dice:</p> <!-- El nombre del autor, igual al nombre del usuario que la creó-->
+                        <p>{{ discusion.contenido }}</p> <!-- El contenido del mensaje-->
+                    </div>                    
+                    <small>Publicado el: {{ discusion.fechacreado.strftime('%Y-%m-%d %H:%M:%S') }}</small> <!-- La fecha y hora de publicación del mensaje-->
+                    <h4>Respuestas:</h4>
+                    <ul>
+                        {% if discusion.respuestas %}
+                            {% for respuesta in discusion.respuestas %}
+                            <!-- Si hay respuestas, para cada respuesta cargará-->
+                                <li><div class="response">
+                                    <p><strong><a href="{{ url_for('perfilusuario', username=respuesta.creador) }}">{{ respuesta.creador }}</a></strong> responde:</p> <!-- El nombre del autor, igual al nombre del usuario que la creó-->
+                                    <p>{{ respuesta.contenido }}</p> <!-- El contenido del mensaje-->
+                                </div></li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No hay respuestas aún.</li> <!-- Si no hay respuestas-->
+                        {% endif %}
+                    </ul>
+                    <form method="POST" action="{{ url_for('responder', iddiscusion=discusion.iddiscusiones) }}">
+                        <textarea name="contenido" placeholder="Tu respuesta" required></textarea>
+                        <button type="submit">Responder</button>
+                    </form>
                 </li>
             {% endfor %}
         {% else %}
-            <li>No hay reseñas disponibles.</li>
+            <li>No hay discusiones disponibles.</li> <!-- Si no hay discusiones -->
         {% endif %}
-    </ul>
+    </ul>    
 
-    <h3>Dejar un comentario:</h3>
+    <!-- Formulario para crear discusiones -->
+    <h3>Iniciar una nueva discusión:</h3>
     <form method="POST">
-        <input type="text" name="creador" placeholder="Tu Nombre" required>
-        <br>
-        <textarea name="contenido" placeholder="Tu Comentario" required></textarea>
-        <button type="submit">Enviar</button>
+        <textarea name="contenido" placeholder="Tu comentario" required></textarea>
+        <button type="submit">Crear discusión</button>
     </form>
+</div>
 
-    <a href="/">Volver al inicio</a>
+    <a href="/" class="back-link">Volver al inicio</a>
+</main>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024
+<small class="cromatico">Versión 4.0</small>
+</footer>
 </body>
-<footer>Creado por Sebastián M Errecalde, Septiembre 2024</footer>
 </html>
