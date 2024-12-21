@@ -10,36 +10,50 @@
     <nav>
         <a href="/">Inicio</a> |
         <a href="/videojuegos">Todos los juegos</a> |
+        {% if 'user_id' in session %}
+            <a href="/perfil">Mi Perfil ({{ session['username'] }})</a> |
+            {% if session['esAdmin'] %} <!-- Si el usuario es administrador, tiene acceso al panel de administración-->
+                <a href="/admin_dashboard">Panel de Admin</a> |
+            {% endif %}
+            <a href="/logout">Salir</a> |
+        {% else %}
+            <a href="/login">Ingreso</a> |
+        {% endif %}
         <a href="/acercade">Sobre mí</a>
-    </nav>
-
+    </nav> 
+<main>
     <div class="profile-container">
         <img src="../static/perfil.jpeg" alt="Imagen de perfil" class="profile-image">
         <h1 id="present" class="present">¡Hola, soy Sebastián Errecalde!</h1>
     </div>
 
     <section>
-        <h2>Acerca de mí</h2>
-        <p>Escribe aquí una breve descripción sobre ti. Puedes incluir tus intereses, habilidades y experiencia.</p>
+        <h2><u>Acerca de mí:</u></h2>
+        <p class="presentacion">¡Bienvenido! Soy Sebastián Errecalde, estudiante de la Tecnicatura Universitaria en Programación en la Universidad Tecnológica Nacional.
+        <br><br>Al combinar mi pasión tanto por los videojuegos como por la programación, creé esta aplicación web como proyecto final de cursada, usando todo lo que aprendí durante esta.
+        <br><br>¡Espero que te guste mucho!
+        </p>
     </section>
 
     <section>
-        <h2>Info de contacto</h2>
+        <h2>Información de contacto:</h2>
         <div class="contact-info">
             <p>Correo electrónico: <br>
-            <img src="../static/email-icon.svg" alt="Email" class="social-icon"><a href="mailto:errecaldesebastianmarcelo@gmail">Click aquí</a></p>
+            <img src="../static/email-icon.svg" alt="Email" class="social-icon"><a href="mailto:errecaldesebastianmarcelo@gmail" target="_blank">Click aquí</a></p>
             <p>Redes sociales: <br>
-                <a href="https://github.com/cer0uno1">
+                <a href="https://github.com/cer0uno1" target="_blank">
                     <img src="../static/github-icon.svg" alt="GitHub" class="social-icon"> GitHub
                 </a>
                 <br>
-                <a href="https://www.linkedin.com/in/sebasti%C3%A1n-errecalde01/">
+                <a href="https://www.linkedin.com/in/sebasti%C3%A1n-errecalde01/" target="_blank">
                     <img src="../static/linkedin-icon.svg" alt="LinkedIn" class="social-icon"> LinkedIn
                 </a>
             </p>
         </div>
     </section>
-
-    <footer>Creado por Sebastián M Errecalde, Septiembre 2024</footer>
+</main>
+<footer>Creado por Sebastián M Errecalde, Septiembre 2024
+<small class="cromatico">Versión 4.0</small>
+</footer>
 </body>
 </html>
